@@ -342,9 +342,9 @@ def generate_delta_rows(
     return final_delta_rows
 
 
-def save_delta_xml(rows: list[dict[str, object]], timestamp: str) -> Path:
+def save_delta_xml(rows: list[dict[str, object]]) -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = OUTPUT_DIR / f"tiekejulikuciai_delta_{timestamp}.xml"
+    output_path = OUTPUT_DIR / "tiekeju_likuciai.xml"
 
     root = ET.Element("products")
 
@@ -427,7 +427,7 @@ def main() -> None:
     if not all_ok:
         print("[WARN] XML negeneruojamas dėl per senų fallback duomenų")
     elif delta_rows:
-        xml_path = save_delta_xml(delta_rows, timestamp)
+        xml_path = save_delta_xml(delta_rows)
         print(f"[OK] Sukurtas DELTA XML: {xml_path}")
         print(f"[OK] Pokyčių / delta eilučių: {len(delta_rows)}")
     else:
