@@ -1,0 +1,35 @@
+name: Combine Supplier CSV Files
+
+on:
+  schedule:
+    # kas 4 valandas
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
+
+jobs:
+  combine:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run combine script
+        run: |
+          python tiekejudatacombo.py
+
+      - name: Commit and push combined file
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git add combined/
+
+          git diff --cached --quiet || git commit -m "Auto generate tiekejulikuciai csv"
+
+          git push
