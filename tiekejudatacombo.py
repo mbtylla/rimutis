@@ -6,8 +6,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from datetime import timedelta
 
-
+MAX_STALE_HOURS = 24
 TIMEZONE = ZoneInfo("Europe/Vilnius")
 CSV_DIR = Path("csv")
 OUTPUT_DIR = Path("combined")
@@ -23,6 +24,10 @@ OUTPUT_COLUMNS = [
     "total_stock",
 ]
 
+def get_file_age_hours(file_path: Path) -> float:
+    now = datetime.now(TIMEZONE)
+    file_time = datetime.fromtimestamp(file_path.stat().st_mtime, TIMEZONE)
+    return (now - file_time).total_seconds() / 3600
 
 def current_timestamp() -> str:
     return datetime.now(TIMEZONE).strftime("%Y-%m-%d_%H-%M-%S")
@@ -125,8 +130,8 @@ def parse_stock(value: object) -> int:
         return 0
 
 
-def make_key(kodas: str, ean: str) -> str:
-    kodas = clean_text(kodas)
+def make_key(kodas: str) -> str:
+    return clean_text(kodas)
     if kodas:
         return kodas
     return ""
@@ -166,7 +171,7 @@ def merge_supplier_rows(
         ean = row["EAN"]
         likutis = parse_stock(row["Likutis"])
 
-        key = make_key(kodas, ean)
+        key = make_key(kodas)
         if not key:
             continue
 
@@ -369,10 +374,21 @@ def main() -> None:
     if not CSV_DIR.exists():
         raise FileNotFoundError(f"Nerastas folderis: {CSV_DIR}")
 
-    latest_files = {}
+    latest_files: dict[str, Path] = {}
+    supplier_status: dict[str, bool] = {}
+    supplier_age: dict[str, float] = {}
+
     for supplier in SUPPLIERS:
-        latest_files[supplier] = get_latest_supplier_file(CSV_DIR, supplier)
-        print(f"[INFO] {supplier}: naudojamas failas {latest_files[supplier].name}")
+        file_path = get_latest_supplier_file(CSV_DIR, supplier)
+        latest_files[supplier] = file_path
+
+        age_hours = get_file_age_hours(file_path)
+        supplier_age[supplier] = age_hours
+
+        is_fresh_enough = age_hours <= MAX_STALE_HOURS
+        supplier_status[supplier] = is_fresh_enough
+
+        print(f"[INFO] {supplier}: {file_path.name} | age={age_hours:.1f}h | allowed={is_fresh_enough}")
 
     combined: dict[str, dict[str, object]] = {}
 
@@ -397,7 +413,20 @@ def main() -> None:
     previous_data = load_combined_csv_as_dict(previous_csv)
     delta_rows = generate_delta_rows(final_rows, previous_data)
 
-    if delta_rows:
+    all_ok = all(supplier_status.values())
+
+    if not all_ok:
+        print("[WARN] Bent vieno tiekėjo paskutinis failas senesnis nei 24h")
+        for supplier in SUPPLIERS:
+            if not supplier_status[supplier]:
+                print(
+                    f"[WARN] {supplier}: paskutinis failas per senas "
+                    f"({supplier_age[supplier]:.1f}h > {MAX_STALE_HOURS}h)"
+                )
+
+    if not all_ok:
+        print("[WARN] XML negeneruojamas dėl per senų fallback duomenų")
+    elif delta_rows:
         xml_path = save_delta_xml(delta_rows, timestamp)
         print(f"[OK] Sukurtas DELTA XML: {xml_path}")
         print(f"[OK] Pokyčių / delta eilučių: {len(delta_rows)}")
