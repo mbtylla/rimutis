@@ -1,0 +1,39 @@
+name: Download Supplier Files
+
+on:
+  schedule:
+    # kas 4 valandas
+    - cron: "0 */4 * * *"
+  workflow_dispatch:  # leidžia paleisti rankiniu būdu
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run download script
+        run: |
+          python tiekejufailudownload.py
+
+      - name: Commit and push downloaded files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git add downloads/
+
+          git diff --cached --quiet || git commit -m "Auto download supplier files"
+
+          git push
