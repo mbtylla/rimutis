@@ -140,7 +140,18 @@ def download_with_retries(
 
     raise RuntimeError(f"{supplier_name}: nepavyko parsiųsti po {max_attempts} bandymų: {last_error}")
 
+def map_marini_stock(value: object) -> str:
+    text = clean_text(value).lower()
 
+    mapping = {
+        "brak": "0",
+        "mała ilość": "1",
+        "średnia ilość": "5",
+        "duża ilość": "15",
+    }
+
+    return mapping.get(text, text)
+    
 def parse_marini(xml_bytes: bytes) -> list[dict[str, str]]:
     root = ET.fromstring(xml_bytes)
     rows: list[dict[str, str]] = []
@@ -148,7 +159,8 @@ def parse_marini(xml_bytes: bytes) -> list[dict[str, str]]:
     for item in root.findall(".//b2b"):
         kodas = clean_text(item.findtext("kod"))
         ean = clean_text(item.findtext("EAN"))
-        likutis = clean_text(item.findtext("stan"))
+        likutis_raw = item.findtext("stan")
+        likutis = map_marini_stock(likutis_raw)
 
         if not kodas and not ean and not likutis:
             continue
