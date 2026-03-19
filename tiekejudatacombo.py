@@ -94,12 +94,8 @@ def parse_stock(value: object) -> int:
 
 def make_key(kodas: str, ean: str) -> str:
     kodas = clean_text(kodas)
-    ean = clean_text(ean)
-
     if kodas:
-        return f"KODAS::{kodas}"
-    if ean:
-        return f"EAN::{ean}"
+        return kodas
     return ""
 
 
@@ -115,7 +111,7 @@ def read_supplier_csv(file_path: Path) -> list[dict[str, str]]:
             ean = clean_text(row.get("EAN"))
             likutis = clean_text(row.get("Likutis"))
 
-            if not kodas and not ean:
+            if not kodas:
                 continue
 
             rows.append({
@@ -210,9 +206,103 @@ def indent_xml(elem: ET.Element, level: int = 0) -> None:
         elem.tail = indent
 
 
-def save_combined_xml(rows: list[dict[str, object]], timestamp: str) -> Path:
+def get_previous_combined_csv(current_file: Path) -> Path | None:
+    files = sorted(
+        OUTPUT_DIR.glob("tiekejulikuciai_*.csv"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+
+    for f in files:
+        if f != current_file:
+            return f
+
+    return None
+
+
+def load_combined_csv_as_dict(file_path: Path | None) -> dict[str, dict[str, object]]:
+    data: dict[str, dict[str, object]] = {}
+
+    if file_path is None or not file_path.exists():
+        return data
+
+    with open(file_path, "r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            kodas = clean_text(row.get("Kodas"))
+            if not kodas:
+                continue
+
+            data[kodas] = {
+                "Kodas": kodas,
+                "EAN": clean_text(row.get("EAN")),
+                "stock_local": parse_stock(row.get("stock_local")),
+                "stock_supplier_fast": parse_stock(row.get("stock_supplier_fast")),
+                "stock_supplier_slow": parse_stock(row.get("stock_supplier_slow")),
+                "total_stock": parse_stock(row.get("total_stock")),
+            }
+
+    return data
+
+
+def generate_delta_rows(
+    current_rows: list[dict[str, object]],
+    previous_data: dict[str, dict[str, object]],
+) -> list[dict[str, object]]:
+    delta_rows: dict[str, dict[str, object]] = {}
+
+    current_kodai: set[str] = set()
+
+    for row in current_rows:
+        kodas = clean_text(row["Kodas"])
+        if not kodas:
+            continue
+
+        current_kodai.add(kodas)
+
+        current_stock = {
+            "stock_local": int(row["stock_local"]),
+            "stock_supplier_fast": int(row["stock_supplier_fast"]),
+            "stock_supplier_slow": int(row["stock_supplier_slow"]),
+            "total_stock": int(row["total_stock"]),
+        }
+
+        previous = previous_data.get(kodas)
+
+        if previous is None:
+            delta_rows[kodas] = row
+            continue
+
+        previous_stock = {
+            "stock_local": int(previous["stock_local"]),
+            "stock_supplier_fast": int(previous["stock_supplier_fast"]),
+            "stock_supplier_slow": int(previous["stock_supplier_slow"]),
+            "total_stock": int(previous["total_stock"]),
+        }
+
+        if current_stock != previous_stock:
+            delta_rows[kodas] = row
+
+    for kodas, previous in previous_data.items():
+        if kodas not in current_kodai:
+            delta_rows[kodas] = {
+                "Kodas": kodas,
+                "EAN": clean_text(previous.get("EAN")),
+                "stock_local": 0,
+                "stock_supplier_fast": 0,
+                "stock_supplier_slow": 0,
+                "total_stock": 0,
+            }
+
+    final_delta_rows = list(delta_rows.values())
+    final_delta_rows.sort(key=lambda x: (clean_text(x["Kodas"]), clean_text(x["EAN"])))
+    return final_delta_rows
+
+
+def save_delta_xml(rows: list[dict[str, object]], timestamp: str) -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = OUTPUT_DIR / f"tiekejulikuciai_{timestamp}.xml"
+    output_path = OUTPUT_DIR / f"tiekejulikuciai_delta_{timestamp}.xml"
 
     root = ET.Element("products")
 
@@ -220,7 +310,11 @@ def save_combined_xml(rows: list[dict[str, object]], timestamp: str) -> Path:
         product = ET.SubElement(root, "product")
 
         ET.SubElement(product, "kodas").text = clean_text(row["Kodas"])
-        ET.SubElement(product, "ean").text = clean_text(row["EAN"])
+
+        ean_value = clean_text(row["EAN"])
+        if ean_value:
+            ET.SubElement(product, "ean").text = ean_value
+
         ET.SubElement(product, "stock_local").text = str(row["stock_local"])
         ET.SubElement(product, "stock_supplier_fast").text = str(row["stock_supplier_fast"])
         ET.SubElement(product, "stock_supplier_slow").text = str(row["stock_supplier_slow"])
@@ -254,11 +348,25 @@ def main() -> None:
     timestamp = current_timestamp()
 
     csv_path = save_combined_csv(final_rows, timestamp)
-    xml_path = save_combined_xml(final_rows, timestamp)
+    print(f"[OK] Sukurtas pilnas CSV: {csv_path}")
 
-    print(f"[OK] Sukurtas CSV: {csv_path}")
-    print(f"[OK] Sukurtas XML: {xml_path}")
-    print(f"[OK] Iš viso eilučių: {len(final_rows)}")
+    previous_csv = get_previous_combined_csv(csv_path)
+    if previous_csv:
+        print(f"[INFO] Ankstesnis CSV palyginimui: {previous_csv.name}")
+    else:
+        print("[INFO] Ankstesnio CSV nerasta, visos prekės bus laikomos naujomis")
+
+    previous_data = load_combined_csv_as_dict(previous_csv)
+    delta_rows = generate_delta_rows(final_rows, previous_data)
+
+    if delta_rows:
+        xml_path = save_delta_xml(delta_rows, timestamp)
+        print(f"[OK] Sukurtas DELTA XML: {xml_path}")
+        print(f"[OK] Pokyčių / delta eilučių: {len(delta_rows)}")
+    else:
+        print("[INFO] Pokyčių nėra, XML negeneruojamas")
+
+    print(f"[OK] Iš viso pilno CSV eilučių: {len(final_rows)}")
 
 
 if __name__ == "__main__":
