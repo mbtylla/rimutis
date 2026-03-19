@@ -27,7 +27,33 @@ OUTPUT_COLUMNS = [
 def current_timestamp() -> str:
     return datetime.now(TIMEZONE).strftime("%Y-%m-%d_%H-%M-%S")
 
+def parse_timestamp_from_supplier_filename(filename: str) -> datetime | None:
+    match = re.match(
+        r"^(Marini|Zuja|Tylla)_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\.csv$",
+        filename,
+    )
+    if not match:
+        return None
 
+    try:
+        return datetime.strptime(match.group(2), "%Y-%m-%d_%H-%M-%S")
+    except ValueError:
+        return None
+
+
+def parse_timestamp_from_combined_filename(filename: str) -> datetime | None:
+    match = re.match(
+        r"^tiekejulikuciai_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\.csv$",
+        filename,
+    )
+    if not match:
+        return None
+
+    try:
+        return datetime.strptime(match.group(1), "%Y-%m-%d_%H-%M-%S")
+    except ValueError:
+        return None
+        
 def extract_supplier(filename: str) -> str | None:
     match = re.match(
         r"^(Marini|Zuja|Tylla)_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})\.csv$",
@@ -39,17 +65,24 @@ def extract_supplier(filename: str) -> str | None:
 
 
 def get_latest_supplier_file(folder: Path, supplier_name: str) -> Path:
-    matching_files = []
+    matching_files: list[tuple[Path, datetime]] = []
 
     for file_path in folder.glob("*.csv"):
         detected_supplier = extract_supplier(file_path.name)
-        if detected_supplier == supplier_name:
-            matching_files.append(file_path)
+        if detected_supplier != supplier_name:
+            continue
+
+        parsed_ts = parse_timestamp_from_supplier_filename(file_path.name)
+        if parsed_ts is None:
+            continue
+
+        matching_files.append((file_path, parsed_ts))
 
     if not matching_files:
         raise FileNotFoundError(f"Nerastas CSV failas tiekėjui: {supplier_name}")
 
-    return max(matching_files, key=lambda p: p.stat().st_mtime)
+    matching_files.sort(key=lambda x: x[1], reverse=True)
+    return matching_files[0][0]
 
 
 def validate_columns(fieldnames: list[str] | None, file_path: Path) -> None:
@@ -207,15 +240,19 @@ def indent_xml(elem: ET.Element, level: int = 0) -> None:
 
 
 def get_previous_combined_csv(current_file: Path) -> Path | None:
-    files = sorted(
-        OUTPUT_DIR.glob("tiekejulikuciai_*.csv"),
-        key=lambda p: p.stat().st_mtime,
-        reverse=True,
-    )
+    files_with_ts: list[tuple[Path, datetime]] = []
 
-    for f in files:
-        if f != current_file:
-            return f
+    for file_path in OUTPUT_DIR.glob("tiekejulikuciai_*.csv"):
+        parsed_ts = parse_timestamp_from_combined_filename(file_path.name)
+        if parsed_ts is None:
+            continue
+        files_with_ts.append((file_path, parsed_ts))
+
+    files_with_ts.sort(key=lambda x: x[1], reverse=True)
+
+    for file_path, _ in files_with_ts:
+        if file_path != current_file:
+            return file_path
 
     return None
 
@@ -341,6 +378,7 @@ def main() -> None:
 
     for supplier, file_path in latest_files.items():
         rows = read_supplier_csv(file_path)
+        print(f"[DEBUG] {supplier}: pirmos 3 eilutės preview: {rows[:3]}")
         merge_supplier_rows(combined, supplier, rows)
         print(f"[OK] {supplier}: apdorota {len(rows)} eilučių")
 
