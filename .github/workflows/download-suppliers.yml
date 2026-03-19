@@ -2,9 +2,8 @@ name: Download Supplier Files
 
 on:
   schedule:
-    # kas 4 valandas
     - cron: "0 */4 * * *"
-  workflow_dispatch:  # leidžia paleisti rankiniu būdu
+  workflow_dispatch:
 
 jobs:
   download:
@@ -21,19 +20,20 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests
+          python -m pip install --upgrade pip
+          pip install requests openpyxl
 
       - name: Run download script
         run: |
-          python tiekejufailudownload.py
+          python -u tiekejufailudownload.py
 
-      - name: Commit and push downloaded files
+      - name: Commit and push files
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git add downloads/
+          git add downloads/ csv/
 
-          git diff --cached --quiet || git commit -m "Auto download supplier files"
+          git diff --cached --quiet || git commit -m "Auto download supplier files and csv"
 
           git push
