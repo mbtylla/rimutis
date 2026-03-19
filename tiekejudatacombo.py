@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -149,7 +150,6 @@ def merge_supplier_rows(
                 "stock_supplier_slow": 0,
             }
 
-        # jei kažkurioje vietoje trūksta Kodas/EAN, užpildom iš kito tiekėjo
         if not combined[key]["Kodas"] and kodas:
             combined[key]["Kodas"] = kodas
         if not combined[key]["EAN"] and ean:
@@ -185,14 +185,51 @@ def finalize_rows(combined: dict[str, dict[str, object]]) -> list[dict[str, obje
     return final_rows
 
 
-def save_combined_csv(rows: list[dict[str, object]]) -> Path:
+def save_combined_csv(rows: list[dict[str, object]], timestamp: str) -> Path:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = OUTPUT_DIR / f"tiekejulikuciai_{current_timestamp()}.csv"
+    output_path = OUTPUT_DIR / f"tiekejulikuciai_{timestamp}.csv"
 
     with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=OUTPUT_COLUMNS)
         writer.writeheader()
         writer.writerows(rows)
+
+    return output_path
+
+
+def indent_xml(elem: ET.Element, level: int = 0) -> None:
+    indent = "\n" + level * "    "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = indent + "    "
+        for child in elem:
+            indent_xml(child, level + 1)
+        if not child.tail or not child.tail.strip():
+            child.tail = indent
+    if level and (not elem.tail or not elem.tail.strip()):
+        elem.tail = indent
+
+
+def save_combined_xml(rows: list[dict[str, object]], timestamp: str) -> Path:
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = OUTPUT_DIR / f"tiekejulikuciai_{timestamp}.xml"
+
+    root = ET.Element("products")
+
+    for row in rows:
+        product = ET.SubElement(root, "product")
+
+        ET.SubElement(product, "kodas").text = clean_text(row["Kodas"])
+        ET.SubElement(product, "ean").text = clean_text(row["EAN"])
+        ET.SubElement(product, "stock_local").text = str(row["stock_local"])
+        ET.SubElement(product, "stock_supplier_fast").text = str(row["stock_supplier_fast"])
+        ET.SubElement(product, "stock_supplier_slow").text = str(row["stock_supplier_slow"])
+        ET.SubElement(product, "total_stock").text = str(row["total_stock"])
+
+    indent_xml(root)
+
+    tree = ET.ElementTree(root)
+    tree.write(output_path, encoding="utf-8", xml_declaration=True)
 
     return output_path
 
@@ -214,9 +251,13 @@ def main() -> None:
         print(f"[OK] {supplier}: apdorota {len(rows)} eilučių")
 
     final_rows = finalize_rows(combined)
-    output_path = save_combined_csv(final_rows)
+    timestamp = current_timestamp()
 
-    print(f"[OK] Sukurtas failas: {output_path}")
+    csv_path = save_combined_csv(final_rows, timestamp)
+    xml_path = save_combined_xml(final_rows, timestamp)
+
+    print(f"[OK] Sukurtas CSV: {csv_path}")
+    print(f"[OK] Sukurtas XML: {xml_path}")
     print(f"[OK] Iš viso eilučių: {len(final_rows)}")
 
 
