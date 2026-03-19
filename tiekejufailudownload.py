@@ -58,7 +58,23 @@ def build_filename(supplier_name: str, extension: str, timestamp: str | None = N
 def clean_text(value: object) -> str:
     if value is None:
         return ""
-    return str(value).strip()
+
+    # jei float -> pašalinam .0
+    if isinstance(value, float):
+        if value.is_integer():
+            return str(int(value))
+        return str(value)
+
+    text = str(value).strip()
+
+    # jei string su .0 gale (pvz iš XML)
+    if text.endswith(".0"):
+        try:
+            return str(int(float(text)))
+        except:
+            pass
+
+    return text
 
 
 def looks_like_xml(content: bytes) -> bool:
