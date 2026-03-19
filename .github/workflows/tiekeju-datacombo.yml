@@ -30,6 +30,6 @@ jobs:
 
           git add combined/
 
-          git diff --cached --quiet || git commit -m "Auto generate tiekejulikuciai csv"
+          git diff --cached --quiet || git commit -m "Auto generate tiekejulikuciai files"
 
           git push
