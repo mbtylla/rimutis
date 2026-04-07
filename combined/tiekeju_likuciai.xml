@@ -1,51 +1,123 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>43P6398</kodas>
-        <ean>5055166357289</ean>
+        <kodas>3210</kodas>
+        <ean>5710409200011</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>42</stock_supplier_fast>
+        <stock_supplier_fast>182</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>42</total_stock>
+        <total_stock>182</total_stock>
     </product>
     <product>
-        <kodas>45P6489</kodas>
-        <ean>5055166358286</ean>
+        <kodas>3247</kodas>
+        <ean>5710409200387</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>17</stock_supplier_fast>
+        <stock_supplier_fast>3</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>17</total_stock>
+        <total_stock>3</total_stock>
     </product>
     <product>
-        <kodas>5911999</kodas>
-        <ean>5902533927227</ean>
+        <kodas>3404</kodas>
+        <ean>5710409105385</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>6</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>6</total_stock>
+    </product>
+    <product>
+        <kodas>3406</kodas>
+        <ean>5710409105484</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>15</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>15</total_stock>
+    </product>
+    <product>
+        <kodas>AR190/D</kodas>
+        <ean>8427614001902</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>11</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>11</total_stock>
+    </product>
+    <product>
+        <kodas>B0523</kodas>
+        <ean>6938242952938</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>63</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>63</total_stock>
+    </product>
+    <product>
+        <kodas>BN84204</kodas>
+        <ean>4019359842045</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>141</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>141</total_stock>
+    </product>
+    <product>
+        <kodas>L40062</kodas>
+        <ean>3550833400623</ean>
         <stock_local>0</stock_local>
         <stock_supplier_fast>0</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
         <total_stock>0</total_stock>
     </product>
     <product>
-        <kodas>5912672</kodas>
-        <ean>5906280653927</ean>
+        <kodas>M-09001</kodas>
+        <ean>4260350564577</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_fast>25</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>0</total_stock>
+        <total_stock>25</total_stock>
     </product>
     <product>
-        <kodas>5913533</kodas>
-        <ean>5905375850739</ean>
+        <kodas>MCP-CA</kodas>
+        <ean>5060204030406</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>0</stock_supplier_fast>
-        <stock_supplier_slow>1</stock_supplier_slow>
+        <stock_supplier_fast>41</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>41</total_stock>
+    </product>
+    <product>
+        <kodas>MCP-PE</kodas>
+        <ean>5060204030383</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>178</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>178</total_stock>
+    </product>
+    <product>
+        <kodas>PN60204</kodas>
+        <ean>4779030060204</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>602</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>602</total_stock>
+    </product>
+    <product>
+        <kodas>YO50444</kodas>
+        <ean>4260243450444</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>1</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
         <total_stock>1</total_stock>
     </product>
     <product>
-        <kodas>5914957</kodas>
-        <ean>5902533929504</ean>
+        <kodas>YO51472</kodas>
+        <ean>4260243451472</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_fast>25</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>0</total_stock>
+        <total_stock>25</total_stock>
+    </product>
+    <product>
+        <kodas>YO51496</kodas>
+        <ean>4260243451496</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>18</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>18</total_stock>
     </product>
 </products>
