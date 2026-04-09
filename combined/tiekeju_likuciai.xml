@@ -1,11 +1,35 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>YO50444</kodas>
-        <ean>4260243450444</ean>
+        <kodas>4022</kodas>
+        <ean>5710409102414</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>59</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>59</total_stock>
+    </product>
+    <product>
+        <kodas>BN84170</kodas>
+        <ean>4019359841703</ean>
         <stock_local>0</stock_local>
         <stock_supplier_fast>1</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
         <total_stock>1</total_stock>
+    </product>
+    <product>
+        <kodas>MCP-GRN-P</kodas>
+        <ean>5060204032851</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>10</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>10</total_stock>
+    </product>
+    <product>
+        <kodas>YO50444</kodas>
+        <ean>4260243450444</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>0</total_stock>
     </product>
 </products>
