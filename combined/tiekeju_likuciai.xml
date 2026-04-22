@@ -1,11 +1,43 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>3230</kodas>
-        <ean>5710409200165</ean>
+        <kodas>3272</kodas>
+        <ean>5710409200783</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>11</stock_supplier_fast>
+        <stock_supplier_fast>7</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>11</total_stock>
+        <total_stock>7</total_stock>
+    </product>
+    <product>
+        <kodas>57798</kodas>
+        <ean>5707167557273</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>23</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>23</total_stock>
+    </product>
+    <product>
+        <kodas>MCP-BLU-P</kodas>
+        <ean>5060204030178</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>21</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>21</total_stock>
+    </product>
+    <product>
+        <kodas>MCP-PE</kodas>
+        <ean>5060204030383</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>93</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>93</total_stock>
+    </product>
+    <product>
+        <kodas>YO51410</kodas>
+        <ean>4260243451410</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>22</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>22</total_stock>
     </product>
 </products>
