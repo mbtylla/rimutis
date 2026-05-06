@@ -8,7 +8,7 @@ FOLDERS_TO_CLEAN = [
     Path("downloads"),
 ]
 
-KEEP_LATEST = 15
+KEEP_LATEST = 50
 
 
 def cleanup_folder(folder: Path, keep_latest: int = KEEP_LATEST) -> None:
