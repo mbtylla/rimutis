@@ -475,12 +475,10 @@ def main() -> None:
     else:
         print("[INFO] Pokyčių nėra, DELTA XML negeneruojamas")
 
-    if all_ok and should_generate_full_xml():
-        full_xml_path = save_xml(final_rows, FULL_XML_PATH)
-        print(f"[OK] Sukurtas PILNAS XML: {full_xml_path}")
-        print(f"[OK] Pilno XML eilučių: {len(final_rows)}")
-    elif all_ok:
-        print("[INFO] Pilnas XML negeneruojamas, nes jau buvo sukurtas per paskutines 24h")
+    if all_ok:
+    full_xml_path = save_xml(final_rows, FULL_XML_PATH)
+    print(f"[OK] Atnaujintas PILNAS XML: {full_xml_path}")
+    print(f"[OK] Pilno XML eilučių: {len(final_rows)}")
 
     print(f"[OK] Iš viso pilno CSV eilučių: {len(final_rows)}")
 
