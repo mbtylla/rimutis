@@ -1,35 +1,35 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>5910522</kodas>
-        <ean>9353965004691</ean>
+        <kodas>40759</kodas>
+        <ean>3760039940759</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_fast>55</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>0</total_stock>
+        <total_stock>55</total_stock>
     </product>
     <product>
-        <kodas>5912478</kodas>
-        <ean>5907090700474</ean>
+        <kodas>IG0323</kodas>
+        <ean>4820148900323</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>0</stock_supplier_fast>
-        <stock_supplier_slow>5</stock_supplier_slow>
-        <total_stock>5</total_stock>
+        <stock_supplier_fast>39</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>39</total_stock>
     </product>
     <product>
-        <kodas>SP70013HYP</kodas>
-        <ean>2780015670013</ean>
+        <kodas>MCP-DI</kodas>
+        <ean>5060204030369</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>981</stock_supplier_fast>
+        <stock_supplier_fast>58</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>981</total_stock>
+        <total_stock>58</total_stock>
     </product>
     <product>
-        <kodas>SP70211HYP</kodas>
-        <ean>2780015670211</ean>
+        <kodas>MCP-FO</kodas>
+        <ean>5060204030529</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>1058</stock_supplier_fast>
+        <stock_supplier_fast>28</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>1058</total_stock>
+        <total_stock>28</total_stock>
     </product>
 </products>
