@@ -1,11 +1,35 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>L50056</kodas>
-        <ean>3550833500569</ean>
+        <kodas>IG0361</kodas>
+        <ean>4820148900361</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>195</stock_supplier_fast>
+        <stock_supplier_fast>3</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>195</total_stock>
+        <total_stock>3</total_stock>
+    </product>
+    <product>
+        <kodas>PN60136</kodas>
+        <ean>4779030060136</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>529</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>529</total_stock>
+    </product>
+    <product>
+        <kodas>YO-328</kodas>
+        <ean>YO-328</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>1</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>1</total_stock>
+    </product>
+    <product>
+        <kodas>YO51410</kodas>
+        <ean>4260243451410</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>13</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>13</total_stock>
     </product>
 </products>
