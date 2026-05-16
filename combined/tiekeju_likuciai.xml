@@ -1,27 +1,59 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>59114609</kodas>
-        <ean>5907090700986</ean>
+        <kodas>5904428</kodas>
+        <ean>5902963000576</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>1</stock_supplier_slow>
+        <total_stock>1</total_stock>
+    </product>
+    <product>
+        <kodas>5909276</kodas>
+        <ean>5903067005184</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>15</stock_supplier_slow>
+        <total_stock>15</total_stock>
+    </product>
+    <product>
+        <kodas>59114611</kodas>
+        <ean>5060666872552</ean>
         <stock_local>0</stock_local>
         <stock_supplier_fast>0</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
         <total_stock>0</total_stock>
     </product>
     <product>
-        <kodas>59114610</kodas>
-        <ean>59060666872323</ean>
+        <kodas>59114612</kodas>
+        <ean>5060666872545</ean>
         <stock_local>0</stock_local>
         <stock_supplier_fast>0</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
         <total_stock>0</total_stock>
     </product>
     <product>
-        <kodas>5914967</kodas>
-        <ean>5907220849424</ean>
+        <kodas>59114613</kodas>
+        <ean>5060666871807</ean>
         <stock_local>0</stock_local>
         <stock_supplier_fast>0</stock_supplier_fast>
-        <stock_supplier_slow>5</stock_supplier_slow>
-        <total_stock>5</total_stock>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>0</total_stock>
+    </product>
+    <product>
+        <kodas>5912169</kodas>
+        <ean>5908214739547</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>1</stock_supplier_slow>
+        <total_stock>1</total_stock>
+    </product>
+    <product>
+        <kodas>791381</kodas>
+        <ean>5902963008107</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>1</stock_supplier_slow>
+        <total_stock>1</total_stock>
     </product>
 </products>
