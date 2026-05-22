@@ -1,25 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>8171</kodas>
+        <kodas>772081</kodas>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>5</stock_supplier_fast>
+        <stock_supplier_fast>0</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>5</total_stock>
-    </product>
-    <product>
-        <kodas>8172</kodas>
-        <stock_local>0</stock_local>
-        <stock_supplier_fast>5</stock_supplier_fast>
-        <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>5</total_stock>
-    </product>
-    <product>
-        <kodas>8173</kodas>
-        <ean>5710409202121</ean>
-        <stock_local>0</stock_local>
-        <stock_supplier_fast>7</stock_supplier_fast>
-        <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>7</total_stock>
+        <total_stock>0</total_stock>
     </product>
 </products>
