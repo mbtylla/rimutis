@@ -1,27 +1,43 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>AR60835</kodas>
-        <ean>8427614608354</ean>
+        <kodas>BMPF-0003-EU</kodas>
+        <ean>817742023965</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>3</stock_supplier_fast>
+        <stock_supplier_fast>15</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>3</total_stock>
+        <total_stock>15</total_stock>
     </product>
     <product>
-        <kodas>AR60836</kodas>
-        <ean>8427614608361</ean>
+        <kodas>L30096</kodas>
+        <ean>3550833300961</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>7</stock_supplier_fast>
+        <stock_supplier_fast>23</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>7</total_stock>
+        <total_stock>23</total_stock>
     </product>
     <product>
-        <kodas>SP48721</kodas>
-        <ean>5060639148721</ean>
+        <kodas>MCP-LB</kodas>
+        <ean>5060204030123</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>34</stock_supplier_fast>
+        <stock_supplier_fast>52</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>34</total_stock>
+        <total_stock>52</total_stock>
+    </product>
+    <product>
+        <kodas>MCP-PE</kodas>
+        <ean>5060204030383</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>309</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>309</total_stock>
+    </product>
+    <product>
+        <kodas>YO50444</kodas>
+        <ean>4260243450444</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>18</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>18</total_stock>
     </product>
 </products>
