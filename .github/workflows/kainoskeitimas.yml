@@ -1,0 +1,37 @@
+name: Update Prices
+
+on:
+  schedule:
+    # 20:00 Lietuvos vasaros laiku (17:00 UTC)
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run price update
+        run: python tavo_failas.py
+
+      - name: Commit updated XML files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add rimutiskaina24.xml rimutiskainoslt.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update prices"
+            git push
+          fi
