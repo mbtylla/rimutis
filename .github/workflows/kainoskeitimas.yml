@@ -20,7 +20,7 @@ jobs:
           python-version: "3.12"
 
       - name: Run price update
-        run: python tavo_failas.py
+        run: python kainospagalean.py
 
       - name: Commit updated XML files
         run: |
