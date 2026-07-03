@@ -9,7 +9,7 @@ TARGET_XMLS = [
 
 product_info = {}
 with open(PRICE_CSV, newline='', encoding='utf-8') as csvfile:
-    reader = csv.DictReader(csvfile)
+    reader = csv.DictReader(csvfile, delimiter=';')
     for row in reader:
         ean_code = row.get("ean_code")
         price = row.get("price")
