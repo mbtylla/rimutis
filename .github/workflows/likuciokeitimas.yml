@@ -1,0 +1,37 @@
+name: Update Stock
+
+on:
+  schedule:
+    # 21:00 Lietuvos vasaros laiku (18:00 UTC)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-stocks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run stock update
+        run: python stockpagalean.py
+
+      - name: Commit updated XML files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add rimutiskaina24.xml rimutiskainoslt.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update stocks"
+            git push
+          fi
