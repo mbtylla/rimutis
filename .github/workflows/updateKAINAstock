@@ -1,0 +1,34 @@
+name: Update KAINALT stock
+
+on:
+  schedule:
+    - cron: "30 */3 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  update-stock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Python dependencies
+        run: |
+          pip install lxml requests
+
+      - name: Run stock updater
+        run: |
+          python3 update_stock_xml.py
+
+      - name: Commit XML changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add rimutiskaina24.xml rimutiskainoslt.xml stock_level.csv
+
+          git diff --cached --quiet || git commit -m "Update stock levels"
+
+          git push
