@@ -18,7 +18,39 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Diagnose EAN 810164730343
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
 
+          target = "810164730343"
+
+          for folder in ("csv", "combined"):
+              path = Path(folder)
+              print(f"\n=== {folder}/ ===")
+
+              if not path.exists():
+                  continue
+
+              for file in sorted(path.glob("*.csv")):
+                  if folder == "csv" and not file.name.startswith(("Marini_", "Zuja_", "Tylla_")):
+                      continue
+
+                  try:
+                      with file.open(encoding="utf-8-sig", newline="") as f:
+                          reader = csv.DictReader(f)
+                          for row in reader:
+                              ean = str(row.get("EAN") or "").strip()
+                              if ean.endswith(".0"):
+                                  ean = ean[:-2]
+
+                              if ean == target:
+                                  print(f"FAILAS: {file}")
+                                  print(row)
+                  except Exception as e:
+                      print(f"KLAIDA skaitant {file}: {e}")
+          PY
       - name: Run combine script
         run: |
           python tiekejudatacombo.py
