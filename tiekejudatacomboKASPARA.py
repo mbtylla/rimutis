@@ -186,35 +186,38 @@ def merge_supplier_rows(
     rows: list[dict[str, str]],
 ) -> None:
     for row in rows:
-        kodas = row["Kodas"]
-        ean = row["EAN"]
+        kodas = clean_text(row["Kodas"])
+        ean = clean_text(row["EAN"])
         likutis = parse_stock(row["Likutis"])
 
-        key = make_key(kodas)
+        # EAN yra pagrindinis raktas; jei jo nėra, naudojamas Kodas.
+        key = make_key(ean) or make_key(kodas)
         if not key:
             continue
 
         if key not in combined:
             combined[key] = {
-                "Kodas": kodas,
+                "Kodas": ean or kodas,
                 "EAN": ean,
                 "stock_local": 0,
                 "stock_supplier_fast": 0,
                 "stock_supplier_slow": 0,
             }
 
-        if not combined[key]["Kodas"] and kodas:
-            combined[key]["Kodas"] = kodas
+        item = combined[key]
+        if ean:
+            item["Kodas"] = ean
+            item["EAN"] = ean
+        elif not item["Kodas"] and kodas:
+            item["Kodas"] = kodas
 
-        if not combined[key]["EAN"] and ean:
-            combined[key]["EAN"] = ean
-
+        # Jei to paties EAN yra kelios eilutės, likučiai sumuojami.
         if supplier_name == "Tylla":
-            combined[key]["stock_local"] = likutis
+            item["stock_local"] += likutis
         elif supplier_name == "Zuja":
-            combined[key]["stock_supplier_fast"] = likutis
+            item["stock_supplier_fast"] += likutis
         elif supplier_name == "Marini":
-            combined[key]["stock_supplier_slow"] = likutis
+            item["stock_supplier_slow"] += likutis
 
 
 def finalize_rows(combined: dict[str, dict[str, object]]) -> list[dict[str, object]]:
@@ -335,17 +338,39 @@ def load_combined_csv_as_dict(file_path: Path | None) -> dict[str, dict[str, obj
 
         for row in reader:
             kodas = clean_text(row.get("Kodas"))
-            if not kodas:
+            ean = clean_text(row.get("EAN"))
+            key = make_key(ean) or make_key(kodas)
+            if not key:
                 continue
 
-            data[kodas] = {
-                "Kodas": kodas,
-                "EAN": clean_text(row.get("EAN")),
-                "stock_local": parse_stock(row.get("stock_local")),
-                "stock_supplier_fast": parse_stock(row.get("stock_supplier_fast")),
-                "stock_supplier_slow": parse_stock(row.get("stock_supplier_slow")),
-                "total_stock": parse_stock(row.get("total_stock")),
-            }
+            if key not in data:
+                data[key] = {
+                    "Kodas": ean or kodas,
+                    "EAN": ean,
+                    "stock_local": 0,
+                    "stock_supplier_fast": 0,
+                    "stock_supplier_slow": 0,
+                    "total_stock": 0,
+                }
+
+            item = data[key]
+            if ean:
+                item["Kodas"] = ean
+                item["EAN"] = ean
+
+            # Senas CSV taip pat normalizuojamas pagal EAN.
+            item["stock_local"] += parse_stock(row.get("stock_local"))
+            item["stock_supplier_fast"] += parse_stock(
+                row.get("stock_supplier_fast")
+            )
+            item["stock_supplier_slow"] += parse_stock(
+                row.get("stock_supplier_slow")
+            )
+            item["total_stock"] = (
+                item["stock_local"]
+                + item["stock_supplier_fast"]
+                + item["stock_supplier_slow"]
+            )
 
     return data
 
@@ -355,15 +380,16 @@ def generate_delta_rows(
     previous_data: dict[str, dict[str, object]],
 ) -> list[dict[str, object]]:
     delta_rows: dict[str, dict[str, object]] = {}
-    current_kodai: set[str] = set()
+    current_keys: set[str] = set()
 
     for row in current_rows:
         kodas = clean_text(row["Kodas"])
-        if not kodas:
+        ean = clean_text(row["EAN"])
+        key = make_key(ean) or make_key(kodas)
+        if not key:
             continue
 
-        current_kodai.add(kodas)
-
+        current_keys.add(key)
         current_stock = {
             "stock_local": int(row["stock_local"]),
             "stock_supplier_fast": int(row["stock_supplier_fast"]),
@@ -371,10 +397,9 @@ def generate_delta_rows(
             "total_stock": int(row["total_stock"]),
         }
 
-        previous = previous_data.get(kodas)
-
+        previous = previous_data.get(key)
         if previous is None:
-            delta_rows[kodas] = row
+            delta_rows[key] = row
             continue
 
         previous_stock = {
@@ -385,12 +410,15 @@ def generate_delta_rows(
         }
 
         if current_stock != previous_stock:
-            delta_rows[kodas] = row
+            delta_rows[key] = row
 
-    for kodas, previous in previous_data.items():
-        if kodas not in current_kodai:
-            delta_rows[kodas] = {
-                "Kodas": kodas,
+    # Ankstesni EAN, kurių dabartiniame pilname sąraše nebėra,
+    # perduodami su nuliniu likučiu.
+    for key, previous in previous_data.items():
+        if key not in current_keys:
+            delta_rows[key] = {
+                "Kodas": clean_text(previous.get("EAN"))
+                or clean_text(previous.get("Kodas")),
                 "EAN": clean_text(previous.get("EAN")),
                 "stock_local": 0,
                 "stock_supplier_fast": 0,
@@ -399,8 +427,9 @@ def generate_delta_rows(
             }
 
     final_delta_rows = list(delta_rows.values())
-    final_delta_rows.sort(key=lambda x: (clean_text(x["Kodas"]), clean_text(x["EAN"])))
-
+    final_delta_rows.sort(
+        key=lambda x: (clean_text(x["EAN"]), clean_text(x["Kodas"]))
+    )
     return final_delta_rows
 
 
