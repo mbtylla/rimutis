@@ -1,27 +1,43 @@
 <?xml version='1.0' encoding='utf-8'?>
 <products>
     <product>
-        <kodas>5060272133160</kodas>
-        <ean>5060272133160</ean>
+        <kodas>4052396134810</kodas>
+        <ean>4052396134810</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>13</stock_supplier_fast>
-        <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>13</total_stock>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>5</stock_supplier_slow>
+        <total_stock>5</total_stock>
     </product>
     <product>
-        <kodas>5710409100465</kodas>
-        <ean>5710409100465</ean>
+        <kodas>4260243262061</kodas>
+        <ean>4260243262061</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>13</stock_supplier_fast>
+        <stock_supplier_fast>11</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>13</total_stock>
+        <total_stock>11</total_stock>
     </product>
     <product>
-        <kodas>5710409200011</kodas>
-        <ean>5710409200011</ean>
+        <kodas>5901691893245</kodas>
+        <ean>5901691893245</ean>
         <stock_local>0</stock_local>
-        <stock_supplier_fast>40</stock_supplier_fast>
+        <stock_supplier_fast>0</stock_supplier_fast>
         <stock_supplier_slow>0</stock_supplier_slow>
-        <total_stock>40</total_stock>
+        <total_stock>0</total_stock>
+    </product>
+    <product>
+        <kodas>5905359951575</kodas>
+        <ean>5905359951575</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>0</total_stock>
+    </product>
+    <product>
+        <kodas>5905359954224</kodas>
+        <ean>5905359954224</ean>
+        <stock_local>0</stock_local>
+        <stock_supplier_fast>0</stock_supplier_fast>
+        <stock_supplier_slow>0</stock_supplier_slow>
+        <total_stock>0</total_stock>
     </product>
 </products>
